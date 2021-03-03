@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2020-06-25T14:52:47Z</date>
+    <date>2021-03-03T02:47:07Z</date>
     <groups>
         <group>
             <name>Templates/Applications</name>
@@ -282,7 +282,7 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                     </applications>
                     <triggers>
                         <trigger>
-                            <expression>{diff()}&gt;0</expression>
+                            <expression>{diff(#3)}&gt;0</expression>
                             <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
                             <recovery_expression>{diff()}=0</recovery_expression>
                             <name>pfSense Gateway Status Changed on {HOST.NAME}</name>
@@ -808,9 +808,10 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                     <description>Gateway Discovery</description>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Gateway $2 RTT</name>
+                            <name>Gateway {#GATEWAY} RTT</name>
                             <key>pfsense.value[gw_value,{#GATEWAY},delay]</key>
                             <delay>30s</delay>
+                            <history>7d</history>
                             <value_type>FLOAT</value_type>
                             <units>ms</units>
                             <applications>
@@ -826,9 +827,10 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             </preprocessing>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gateway $2 Packet  Loss</name>
+                            <name>Gateway {#GATEWAY} Packet  Loss</name>
                             <key>pfsense.value[gw_value,{#GATEWAY},loss]</key>
                             <delay>30s</delay>
+                            <history>7d</history>
                             <units>%</units>
                             <applications>
                                 <application>
@@ -843,32 +845,66 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             </preprocessing>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gateway $2 Status</name>
+                            <name>Gateway {#GATEWAY} Status</name>
                             <key>pfsense.value[gw_value,{#GATEWAY},status]</key>
                             <delay>30s</delay>
-                            <trends>0</trends>
-                            <value_type>TEXT</value_type>
+                            <history>7d</history>
                             <description>Status of Gateway</description>
                             <applications>
                                 <application>
                                     <name>Gateways</name>
                                 </application>
                             </applications>
+                            <valuemap>
+                                <name>pfSense Gateway Status</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>none
+0</params>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>down
+5</params>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>Packet Loss
+1</params>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>High Delay
+2</params>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>High Packet Loss
+3</params>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>Forced Down
+4</params>
+                                </step>
+                            </preprocessing>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{str(loss)}=1</expression>
+                                    <expression>{last(#3)}=1</expression>
                                     <name>Alta perda de Pacote em {#GATEWAY}</name>
                                     <priority>HIGH</priority>
                                     <description>High Packet Loss on Gateway</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
-                                    <expression>{str(delay)}=1</expression>
+                                    <expression>{last(#3)}=2</expression>
                                     <name>Delay alto em {#GATEWAY}</name>
                                     <priority>HIGH</priority>
                                     <description>High Packet Loss on Gateway</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
-                                    <expression>{str(down)}=1</expression>
+                                    <expression>{last(#3)}=5</expression>
                                     <name>Gateway {#GATEWAY} está offline!</name>
                                     <priority>DISASTER</priority>
                                     <description>Gateway is Down</description>
@@ -876,9 +912,10 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>Gateway $2 RTT Std Deviation</name>
+                            <name>Gateway {#GATEWAY} RTT Std Deviation</name>
                             <key>pfsense.value[gw_value,{#GATEWAY},stddev]</key>
                             <delay>30s</delay>
+                            <history>7d</history>
                             <value_type>FLOAT</value_type>
                             <units>ms</units>
                             <applications>
@@ -1059,7 +1096,7 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             </preprocessing>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last()}=0</expression>
+                                    <expression>{last(#3)}=0</expression>
                                     <name>OpenVPN Client {#NAME} Tunnel is Down</name>
                                     <priority>HIGH</priority>
                                     <description>OpenVPN Tunnel Down</description>
@@ -1834,6 +1871,35 @@ or&#13;
                 <mapping>
                     <value>4</value>
                     <newvalue>Problema</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>pfSense Gateway Status</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Up</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Packet Loss</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>High Delay</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>High Packet Loss</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>Forced Down</newvalue>
+                </mapping>
+                <mapping>
+                    <value>5</value>
+                    <newvalue>Down</newvalue>
                 </mapping>
             </mappings>
         </value_map>
