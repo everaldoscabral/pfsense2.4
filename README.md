@@ -11,11 +11,11 @@ Este Template está associado ao Template default do Zabbix (Zabbix Agent), just
 * Acessar SSH o Firewall e no modo Shell instalar: pkg install python27-2.7.18
 * Realizar o download dos templates TEMPLATE-PFSENSE-2.4, TEMPLATE-PFSENSE-IPSEC-2.4 e TEMPLATE-ZABBIX-AGENT;
 * Cadastrar o Host no Zabbix adicionando o IP dele na interfaces do agente;
-* Criar as Expressões Regulares no Global ou remover do item caso deseje.
+* Criar as Expressões Regulares Global ou remover do item caso deseje.
 
 Pronto! Agora é verificar os itens coletados.
 
-# Expressão Regular Global
+# Expressões Regulares Global
 
 ![Expressão_Regular_Global_PFSense.PNG](Expressão_Regular_Global_PFSense.PNG)
 
