@@ -15,4 +15,8 @@ Este Template está associado ao Template default do Zabbix (Zabbix Agent), just
 
 Pronto! Agora é verificar os itens coletados.
 
+# Expressão Regular Global
+
+![Expressão_Regular_Global_PFSense.PNG](Expressão_Regular_Global_PFSense.PNG)
+
 Link do blog: https://everaldoscabral.blogspot.com/2020/03/sobre-o-zabbix-monitoramento-de-pfsense.html?m=1
