@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2021-03-03T02:47:07Z</date>
+    <date>2021-03-03T11:06:37Z</date>
     <groups>
         <group>
             <name>Templates/Applications</name>
@@ -38,7 +38,7 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                     <name>Filesystems</name>
                 </application>
                 <application>
-                    <name>Gateways</name>
+                    <name>Gateway Raw</name>
                 </application>
                 <application>
                     <name>Interfaces de Rede</name>
@@ -277,7 +277,7 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                     <description>Gateway Status Raw</description>
                     <applications>
                         <application>
-                            <name>Gateways</name>
+                            <name>Gateway Raw</name>
                         </application>
                     </applications>
                     <triggers>
@@ -814,11 +814,11 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             <history>7d</history>
                             <value_type>FLOAT</value_type>
                             <units>ms</units>
-                            <applications>
-                                <application>
-                                    <name>Gateways</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gateway: {#GATEWAY}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <preprocessing>
                                 <step>
                                     <type>RTRIM</type>
@@ -832,11 +832,11 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             <delay>30s</delay>
                             <history>7d</history>
                             <units>%</units>
-                            <applications>
-                                <application>
-                                    <name>Gateways</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gateway: {#GATEWAY}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <preprocessing>
                                 <step>
                                     <type>RTRIM</type>
@@ -850,11 +850,11 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             <delay>30s</delay>
                             <history>7d</history>
                             <description>Status of Gateway</description>
-                            <applications>
-                                <application>
-                                    <name>Gateways</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gateway: {#GATEWAY}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <valuemap>
                                 <name>pfSense Gateway Status</name>
                             </valuemap>
@@ -889,6 +889,15 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                                     <params>Forced Down
 4</params>
                                 </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <params>online
+0</params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <params>120s</params>
+                                </step>
                             </preprocessing>
                             <trigger_prototypes>
                                 <trigger_prototype>
@@ -918,11 +927,11 @@ https://github.com/rbicelli/pfsense-zabbix-template</description>
                             <history>7d</history>
                             <value_type>FLOAT</value_type>
                             <units>ms</units>
-                            <applications>
-                                <application>
-                                    <name>Gateways</name>
-                                </application>
-                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Gateway: {#GATEWAY}</name>
+                                </application_prototype>
+                            </application_prototypes>
                             <preprocessing>
                                 <step>
                                     <type>RTRIM</type>
