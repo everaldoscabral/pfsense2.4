@@ -9,6 +9,7 @@ Este Template está associado ao Template default do Zabbix (Zabbix Agent), just
 * Colocar os scripts zabbix-ipsec.py, check_ipsec.sh e check_ipsec_traffic.sh em /usr/local/bin;
 * Agora no pfSense ir em Services --> Zabbix Agent 4.0 (estou utilizando essa versão do Agent) --> Clicar em Show Advanced Options e adicionar os user parameters que constam no documento para download. Depois basta salvar;
 * Acessar SSH o Firewall e no modo Shell instalar: pkg install python27-2.7.18
+* Caso dê erro ao tentar instalar o python, execute o comando: pkg-static install -f pkg e depois tente executar novamente a instalação do python.
 * Realizar o download dos templates TEMPLATE-PFSENSE-2.4, TEMPLATE-PFSENSE-IPSEC-2.4 e TEMPLATE-ZABBIX-AGENT;
 * Cadastrar o Host no Zabbix adicionando o IP dele na interfaces do agente;
 * Criar as Expressões Regulares Global ou remover do item caso deseje.
